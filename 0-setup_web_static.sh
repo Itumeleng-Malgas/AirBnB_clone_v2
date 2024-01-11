@@ -36,17 +36,14 @@ server {
 
 	index index.html;
     }
-
-    error_page 404 /404.html;
-    location = /404.html {
-        root /usr/share/nginx/html;
-        internal;
-    }
 }
 EOL
 )
 
 echo "$config_content" | sudo tee /etc/nginx/sites-available/default
+
+# Enable new configs by linking site-available with site-enabled
+ln -sf /etc/nginx/site-available/default /etc/nginx/site-enabled
 
 # Restart Nginx
 sudo service nginx restart
