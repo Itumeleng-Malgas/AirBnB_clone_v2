@@ -42,12 +42,6 @@ server {
         root /usr/share/nginx/html;
         internal;
     }
-
-    error_page 500 502 503 504 /50x.html;
-    location = /50x.html {
-        root /usr/share/nginx/html;
-        internal;
-    }
 }
 EOL
 )
