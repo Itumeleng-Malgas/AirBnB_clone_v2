@@ -6,13 +6,12 @@ if ! command -v nginx &> /dev/null; then
     sudo apt-get update && sudo apt-get install -y nginx
 fi
 
-# Create necessary directories
+# Create necessary directories if not exists
 sudo mkdir -p /data/web_static/releases/test
 sudo mkdir -p /data/web_static/shared
 
 # Create a fake HTML file
-echo "<html><head></head><body>Holberton School</body></html>" |
-	sudo tee /data/web_static/releases/test/index.html
+echo "<html><head></head><body>Holberton School</body></html>" | sudo tee /data/web_static/releases/test/index.html
 
 # Create or recreate symbolic link
 sudo ln -sf /data/web_static/releases/test /data/web_static/current
@@ -31,10 +30,10 @@ server {
     }
 
     location / {
-        add_header X-Served-By $HOSTNAME;
+        add_header X-Served-By \$HOSTNAME;
         #proxy_pass http://0.0.0.0:5000;
 
-	index index.html;
+        index index.html;
     }
 }
 EOL
@@ -42,10 +41,11 @@ EOL
 
 echo "$config_content" | sudo tee /etc/nginx/sites-available/default
 
-# Enable new configs by linking site-available with site-enabled
-ln -sf /etc/nginx/site-available/default /etc/nginx/site-enabled
+# Enable new configs by linking sites-available with sites-enabled
+sudo ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled
+
+# Test Nginx configuration before restart
+sudo nginx -t
 
 # Restart Nginx
 sudo service nginx restart
-
-exit 0
