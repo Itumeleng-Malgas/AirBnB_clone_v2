@@ -1,51 +1,31 @@
 #!/usr/bin/env bash
-# Sets up web servers for the deployment of web_static
+#Sets up webservers for deployment of web_static
 
-# Install Nginx if not already installed
-if ! command -v nginx &> /dev/null; then
-    sudo apt-get update && sudo apt-get install -y nginx
+# Install nginx if it is not installed already
+if command -v nginx &> /dev/null; then
+	apt -y update && apt -y install nginx
 fi
 
-# Create necessary directories if not exists
-sudo mkdir -p /data/web_static/releases/test
-sudo mkdir -p /data/web_static/shared
+# Create necessary directories
+mkdir -p /data/web_static/releases/test
+mkdir -p /data/web_static/shared
 
 # Create a fake HTML file
 echo "<html><head></head><body>Holberton School</body></html>" | sudo tee /data/web_static/releases/test/index.html
 
-# Create or recreate symbolic link
-sudo ln -sf /data/web_static/releases/test /data/web_static/current
+# Symbolic link /data/web_static/current to /data/web_static/releases/test
+ln -sf /data/web_static/releases/test/ /data/web_static/current
 
-# Give ownership to the ubuntu user and group
-sudo chown -R ubuntu:ubuntu /data/
+# Giving ownership to user ubuntu
+chown -R ubuntu:ubuntu /data/
 
-# Update Nginx configuration
-config_content=$(cat <<EOL
-server {
-    listen 80;
-    server_name _;
+# Serve the content of /data/web_static/current/ at /hbnb_static
+config_str="\n\tlocation /hbnb_static {\n\t\t alias /data/web_static/current/;\n\t}"
 
-    location /hbnb_static {
-        alias /data/web_static/current;
-    }
+sed -i "/servername ;/a\ $config_str" /etc/nginx/sites-available/default
 
-    location / {
-        add_header X-Served-By \$HOSTNAME;
-        #proxy_pass http://0.0.0.0:5000;
+# Link site-available with site-enabled
+ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled
 
-        index index.html;
-    }
-}
-EOL
-)
-
-echo "$config_content" | sudo tee /etc/nginx/sites-available/default
-
-# Enable new configs by linking sites-available with sites-enabled
-sudo ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled
-
-# Test Nginx configuration before restart
-sudo nginx -t
-
-# Restart Nginx
-sudo service nginx restart
+# Restart nginx
+service nginx restart
