@@ -22,10 +22,12 @@ def do_clean(number=0):
             number += 1
 
         # Delete unnecessary archives in the versions folder
-        local("ls -t versions/ | tail -n +{} | xargs -I {{}} rm versions/{{}}".format(number))
+        local("ls -t versions/ | tail -n +{} | xargs -I {{}} rm versions/{{}}"
+              .format(number))
 
         # Delete unnecessary archives in the /data/web_static/releases folder
-        run("ls -t /data/web_static/releases/ | tail -n +{} | xargs -I {{}} rm -rf /data/web_static/releases/{{}}".format(number))
+        run("ls -t /data/web_static/releases/ | tail -n +{} | xargs -I {{}}"
+            "rm -rf /data/web_static/releases/{{}}".format(number))
 
         return True
 
