@@ -12,7 +12,8 @@ mkdir -p /data/web_static/releases/test
 mkdir -p /data/web_static/shared
 
 # Create a fake HTML file
-echo "<html><head></head><body>Holberton School</body></html>" | sudo tee /data/web_static/releases/test/index.html
+html_content="<html><head></head><body>Holberton School</body></html>"
+echo "$html_content" | sudo tee /data/web_static/releases/test/index.html
 
 # Symbolic link /data/web_static/current to /data/web_static/releases/test
 ln -sf /data/web_static/releases/test/ /data/web_static/current
@@ -21,9 +22,12 @@ ln -sf /data/web_static/releases/test/ /data/web_static/current
 chown -R ubuntu:ubuntu /data/
 
 # Serve the content of /data/web_static/current/ at /hbnb_static
-config_str="\n\tlocation /hbnb_static {\n\t\t alias /data/web_static/current/;\n\t}"
-
-sed -i "/servername ;/a\ $config_str" /etc/nginx/sites-available/default
+conf="
+\tlocation /hbnb_static {
+\t\talias /data/web_static/current/;
+\t}
+"
+sed -i "/servername ;/a $conf" /etc/nginx/sites-available/default
 
 # Link site-available with site-enabled
 ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled
