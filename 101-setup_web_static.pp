@@ -1,4 +1,4 @@
-# File: site.pp
+# File: 101-setup_web_static.pp
 
 # Install Nginx if not already installed
 package { 'nginx':
@@ -41,4 +41,18 @@ service { 'nginx':
   ensure  => running,
   enable  => true,
   require => File['/etc/nginx/sites-available/default'],
+}
+
+# Define firewall rules for Nginx
+exec { 'allow_nginx':
+  command => '/sbin/iptables -A INPUT -p tcp --dport 80 -j ACCEPT',
+  unless  => '/sbin/iptables -nL | grep -q "ACCEPT.*tcp.*dpt:80"',
+  require => Service['nginx'],
+}
+
+# Reload the firewall
+exec { 'reload_firewall':
+  command => '/sbin/iptables -I INPUT 1 -p tcp --dport 22 -j ACCEPT && /sbin/iptables-save > /etc/sysconfig/iptables',
+  unless  => '/sbin/iptables -nL | grep -q "ACCEPT.*tcp.*dpt:22"',
+  subscribe => Exec['allow_nginx'],
 }
