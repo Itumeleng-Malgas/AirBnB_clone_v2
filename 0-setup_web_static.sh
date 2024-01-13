@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-#Sets up webservers for deployment of web_static
+# Sets up webservers for deployment of web_static
 
 # Install nginx if it is not installed already
-if ! command -v nginx &> /dev/null; then
-	apt -y update && apt -y install nginx
-fi
+apt -y update
+apt -y install nginx
+
 ufw allow 'Nginx HTTP'
 
 # Create necessary directories
