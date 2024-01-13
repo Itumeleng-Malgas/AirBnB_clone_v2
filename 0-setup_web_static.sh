@@ -27,7 +27,7 @@ conf="
 \t\talias /data/web_static/current/;
 \t}
 "
-sed -i "/servername .*;/a $conf" /etc/nginx/sites-available/default
+sed -i "/servername localhost;/a $conf" /etc/nginx/sites-available/default
 
 # Link site-available with site-enabled
 ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled
