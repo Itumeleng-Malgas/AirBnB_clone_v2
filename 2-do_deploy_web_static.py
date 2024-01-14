@@ -9,13 +9,13 @@ from os.path import exists
 env.hosts = ['3.85.148.189', '54.87.195.116']
 releases_path = '/data/web_static/releases'
 
+
 def do_deploy(archive_path):
     """
     Distributes an archive to your web servers
     """
     if not exists(archive_path):
         return False
-    
     try:
         # Upload the archive to the /tmp/ directory on the server
         put(archive_path, "/tmp/")
