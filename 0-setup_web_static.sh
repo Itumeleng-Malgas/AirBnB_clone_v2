@@ -12,8 +12,22 @@ ln -sf /data/web_static/releases/test/ /data/web_static/current
 
 chown -R ubuntu:ubuntu /data/
 
-config_str="\n\tlocation /hbnb_static {\n\t\t alias /data/web_static/current/;\n\t}"
-sed -i "/servername .*;/a\ $config_str" /etc/nginx/sites-available/default
+nginx_config="
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
+    root /var/www/html;
+    index index.html;
+
+    server_name _;
+    
+    location /hbnb_static {
+        alias /data/web_static/current/;
+    }
+}
+"
+echo -e "$nginx_config" | sudo tee /etc/nginx/sites-available/default > /dev/null
 
 ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled
-service nginx reload
+sudo service nginx reload
