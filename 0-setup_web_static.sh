@@ -8,26 +8,18 @@ mkdir -p /data/web_static/releases/test/
 mkdir -p /data/web_static/shared/
 
 echo "Hello world!" | sudo tee /data/web_static/releases/test/index.html
-ln -sf /data/web_static/releases/test/ /data/web_static/current
+ln -sf /data/web_static/releases/test/ /data/web_static/current/
 
+# Ensure correct permissions
+sudo chmod -R 755 /data/web_static/current/
 chown -R ubuntu:ubuntu /data/
 
-nginx_config="
-server {
-    listen 80 default_server;
-    listen [::]:80 default_server;
-
-    root /var/www/html;
+config_str="location /hbnb_static {
+    alias /data/web_static/current/;
     index index.html;
+}"
 
-    server_name _;
-    
-    location /hbnb_static {
-        alias /data/web_static/current/;
-    }
-}
-"
-echo -e "$nginx_config" | sudo tee /etc/nginx/sites-available/default > /dev/null
+sed -i "/server_name .*;/a\ $config_str" /etc/nginx/sites-available/default
 
 ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled
-sudo service nginx reload
+service nginx reload
