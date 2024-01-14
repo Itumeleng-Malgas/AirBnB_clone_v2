@@ -11,7 +11,6 @@ echo "Hello world!" | sudo tee /data/web_static/releases/test/index.html
 ln -sf /data/web_static/releases/test/ /data/web_static/current/
 
 # Ensure correct permissions
-sudo chmod -R 755 /data/web_static/current/
 chown -R ubuntu:ubuntu /data/
 
 config_str="location /hbnb_static {
