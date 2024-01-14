@@ -13,11 +13,7 @@ ln -sf /data/web_static/releases/test/ /data/web_static/current/
 # Ensure correct permissions
 chown -R ubuntu:ubuntu /data/
 
-config_str="location /hbnb_static {
-    alias /data/web_static/current/;
-    index index.html;
-}"
-
+config_str="\n\tlocation /hbnb_static {\n\t\t alias /data/web_static/current/;\n\t}"
 sed -i "/server_name .*;/a\ $config_str" /etc/nginx/sites-available/default
 
 ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled
