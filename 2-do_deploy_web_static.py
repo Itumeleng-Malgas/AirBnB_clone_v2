@@ -31,12 +31,12 @@ def do_deploy(archive_path):
         run("mv {}/web_static/* {}/".format(release_folder, release_folder))
 
         # Remove unnecessary directories and files
-        run("rm -rf {}/web_static".format(release_folder))
+        # run("rm -rf {}/web_static".format(release_folder))
         run("rm /tmp/{}".format(file_name))
 
         # Update the symbolic link
         run("rm -rf /data/web_static/current")
-        run("ln -s {} /data/web_static/current".format(release_folder))
+        run("ln -sf {} /data/web_static/current".format(release_folder))
 
         return True
 
