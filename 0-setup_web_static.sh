@@ -18,12 +18,7 @@ html_content="<!DOCTYPE html><html><body>Hello world!</body></html>"
 # Create a simple HTML file for testing
 echo -e "$html_content" | sudo tee /data/web_static/releases/test/index.html
 
-# Create a symbolic link to the 'test' release
-target_directory="/data/web_static/current/"
-if [ ! -d "$target_directory" ]; then
-    mkdir -p "$target_directory"
-fi
-ln -sf /data/web_static/releases/test/ "$target_directory"
+ln -sf /data/web_static/releases/test/ /data/web_static/current/
 
 # Ensure correct permissions
 chown -R ubuntu:ubuntu /data/
