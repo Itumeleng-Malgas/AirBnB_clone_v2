@@ -9,7 +9,8 @@ if ! command -v nginx &> /dev/null; then
 fi
 
 # Directories
-mkdir -p /data/web_static/releases/test/ /data/web_static/shared/
+mkdir -p /data/web_static/releases/test/
+mkdir -p /data/web_static/shared/
 
 # HTML content
 html_content="<!DOCTYPE html><html><body>Hello world!</body></html>"
