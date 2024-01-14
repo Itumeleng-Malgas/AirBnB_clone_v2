@@ -20,6 +20,15 @@ fi
 ln -sf /data/web_static/releases/test/ /data/web_static/current/
 chown -R ubuntu:ubuntu /data/
 
-sudo sed -i "/server_name .*;/a\ location /hbnb_static { alias /data/web_static/current;}" /etc/nginx/sites-enabled/default
+# Serve the content of /data/web_static/current/ at /hbnb_static
+conf="
+\tlocation /hbnb_static {
+\t\talias /data/web_static/current/;
+\t}
+"
+sed -i "/servername ;/a $conf" /etc/nginx/sites-available/default
+
+# Link site-available with site-enabled
+ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled
 
 service nginx restart
