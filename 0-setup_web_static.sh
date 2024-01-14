@@ -8,8 +8,11 @@ apt -y install nginx
 ufw allow 'Nginx HTTP'
 
 # Create necessary directories
-mkdir -p /data/web_static/releases/test
+mkdir -p /data/
+mkdir -p /data/web_static/
+mkdir -p /data/web_static/releases/
 mkdir -p /data/web_static/shared
+mkdir -p /data/web_static/releases/test
 
 # Create a fake HTML file
 html_content="<html><head></head><body>Holberton School</body></html>"
