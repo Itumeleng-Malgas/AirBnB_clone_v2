@@ -5,9 +5,8 @@
 if ! command -v nginx &> /dev/null; then
     apt -y update
     apt -y install nginx
+    ufw allow 'Nginx HTTP'
 fi
-
-ufw allow 'Nginx HTTP'
 
 # Directories
 mkdir -p /data/web_static/releases/test/ /data/web_static/shared/
@@ -23,9 +22,10 @@ ln -sf /data/web_static/releases/test/ /data/web_static/current/
 # Ensure correct permissions
 chown -R ubuntu:ubuntu /data/
 
-# Configure Nginx to serve the static content
-config_str=$'\n\tlocation /hbnb_static {\n\t\talias /data/web_static/current/;\n\t}\n'
-sed -i "/server_name .*;/a$config_str" /etc/nginx/sites-available/default
+if [ -d "/data/web_static/current/" ]; then
+    rm -rf /data/web_static/current/
+fi
+ln -sf /data/web_static/releases/test/ /data/web_static/current/
 
 # Enable Nginx site configuration
 ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled
