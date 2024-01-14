@@ -16,4 +16,4 @@ config_str="\n\tlocation /hbnb_static {\n\t\t alias /data/web_static/current/;\n
 sed -i "/servername .*;/a\ $config_str" /etc/nginx/sites-available/default
 
 ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled
-service nginx restart
+service nginx reload
