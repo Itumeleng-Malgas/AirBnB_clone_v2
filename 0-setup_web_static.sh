@@ -4,8 +4,8 @@
 apt -y update && apt -y install nginx
 ufw allow 'Nginx HTTP'
 
-mkdir -p /data/web_static/releases/test
-mkdir -p /data/web_static/shared
+mkdir -p /data/web_static/releases/test/
+mkdir -p /data/web_static/shared/
 
 echo "Hello world!" | sudo tee /data/web_static/releases/test/index.html
 ln -sf /data/web_static/releases/test/ /data/web_static/current
