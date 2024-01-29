@@ -25,6 +25,7 @@ def c_text(text):
     return f'C {text}'
 
 
+@app.route('/python', strict_slashes=False)
 @app.route('/python/<text>', strict_slashes=False)
 def python_text(text='is cool'):
     """ Return  "Python ", followed by the value of the text """
